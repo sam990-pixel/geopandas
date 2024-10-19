@@ -1,0 +1,21 @@
+import geopandas as gpd
+import folium
+
+# Load shapefile for Gurez Valley
+shapefile_path = 'path_to_your_shapefile/gurez_valley.shp'
+gurez_valley = gpd.read_file(shapefile_path)
+
+# Reproject to WGS84 (lat/lon) if not already
+gurez_valley = gurez_valley.to_crs('EPSG:4326')
+
+# Get the centroid of Gurez Valley
+centroid = gurez_valley.geometry.centroid.iloc[0]
+
+# Create a folium map centered at the centroid of Gurez Valley
+m = folium.Map(location=[centroid.y, centroid.x], zoom_start=10, tiles='OpenStreetMap')
+
+# Add Gurez Valley boundary to the map
+folium.GeoJson(gurez_valley).add_to(m)
+
+# Save the map as an HTML file
+m.save('gurez_valley_map.html')
